@@ -1,10 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <!-- Required meta tags-->
     <meta charset="UTF-8">
-    <title>Example front-end.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+    <!-- Title Page-->
+    <title>MFEC Staff Registration</title>
+
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
 </head>
+
 <body>
-    <div>Define your front-end here.</div>
-</body>
+    <div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-1">
+                <div class="card-body">
+                    <h2 class="title">Registration MFEC Staff for Medical Record</h2>
+                    <form action="http://localhost:10050/medical/register"  enctype="multipart/form-data; boundary=BOUNDARY" method="POST">
+                        <div class="input-group">
+                            <input class="input--style-1" type="number" placeholder="Employee No" name="employeeNo" required>
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-1" type="text" placeholder="NAME" name="fname" required>
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-1" type="text" placeholder="SURNAME" name="lname" required>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <input class="input--style-1" type="number" placeholder="AGE" name="age" required>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="sex" required>
+                                            <option disabled="disabled" selected="selected">GENDER</option>
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                            <option>Other</option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-1" type="text" required placeholder="Hospital Name Node" name="hospital">
+                        </div>
+
+                        <div class="p-t-20">
+                            <button class="btn btn--radius btn--green" type="submit">Register Now</button>
+
+
+                </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-1">
+                <div class="card-body">
+                    <h2 class="title">Add Basic Medical Record </h2>
+                    <form action="http://localhost:10050/medical/addBasicRecord"  enctype="multipart/form-data; boundary=BOUNDARY" method="POST">
+                        <div class="input-group">
+                            <input class="input--style-1" type="number" placeholder="Employee No" name="employeeNo" required>
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-1" type="number" placeholder="Systolic" name="systolic" required>
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-1" type="number" placeholder="Diastolic" name="diastolic" required>
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-1" type="text" required placeholder="Hospital Name Node" name="hospital">
+                        </div>
+
+                        <div class="p-t-20">
+                            <button class="btn btn--radius btn--green" type="submit">New Record</button>
+
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card card-1">
+        <div class="card-heading"></div>
+        <div class="card-body">
+            <h2 class="title">Profile And Basic Record Data </h2>
+
+            <form action="http://localhost:10050/medical/getAllEnrollment" method="get">
+                <button class="btn btn--radius btn--green" type="submit">Check All Profile Staff</button>
+            </form>
+            <br>
+            <form action="http://localhost:10050/medical/getAllRecord" method="get">
+                <button class="btn btn--radius btn--green" type="submit">Check All Basic Record </button>
+            </form>
+
+
+        </div>
+
+    </div>
+
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script src="js/global.js"></script>
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
 </html>
+<!-- end document-->
