@@ -85,10 +85,10 @@
             <div class="card card-1">
                 <div class="card-body">
                     <h2 class="title">Add Basic Medical Record </h2>
-                    <form action="http://localhost:10050/medical/addBasicRecord"  enctype="multipart/form-data; boundary=BOUNDARY" method="POST">
+                    <form action="http://localhost:10050/medical/addBasicRecord"  enctype="multipart/form-data"  method="POST">
                         <div class="input-group">
                             <input class="input--style-1" type="number" placeholder="Employee No" name="employeeNo" required>
-                        </div>
+                        </div>x
                         <div class="input-group">
                             <input class="input--style-1" type="number" placeholder="Systolic" name="systolic" required>
                         </div>
@@ -98,10 +98,12 @@
                         <div class="input-group">
                             <input class="input--style-1" type="text" required placeholder="Hospital Name Node" name="hospital">
                         </div>
+                        <dic class="input-group">
+                            <input type="file" class="input--style-1" required placeholder="Upload File (Only Zip and Jar)" name="file">
+                        </dic>
 
                         <div class="p-t-20">
                             <button class="btn btn--radius btn--green" type="submit">New Record</button>
-
 
                         </div>
                     </form>

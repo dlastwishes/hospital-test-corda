@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable
 import contracts.MedicalContract
 import net.corda.core.contracts.Command
 import net.corda.core.contracts.requireThat
+import net.corda.core.crypto.SecureHash
 import net.corda.core.flows.*
 import net.corda.core.identity.Party
 import net.corda.core.transactions.SignedTransaction
@@ -18,7 +19,8 @@ object NewBasicMedicalRecordFlow {
     class NewBasicRecord(val employeeNo : Int,
                          val systolic : Int,
                          val diastolic : Int,
-                         val hospital : Party): FlowLogic<SignedTransaction>() {
+                         val hospital : Party,
+                         val attachmentHash : SecureHash ): FlowLogic<SignedTransaction>() {
 
         companion object {
             object GENERATING_TRANSACTION : ProgressTracker.Step("Generating transaction to register new staff profile")
@@ -52,11 +54,13 @@ object NewBasicMedicalRecordFlow {
 
             progressTracker.currentStep = GENERATING_TRANSACTION
             // Generate register transaction.
+
             val BasicState = BasicMedicalRecordState(employeeNo , systolic, diastolic , serviceHub.myInfo.legalIdentities.first(), hospital)
             val txCommand = Command(MedicalContract.AddBasicRecord() , BasicState.participants.map { it.owningKey })
             val txBuilder = TransactionBuilder(notary)
                     .addOutputState(BasicState, MedicalContract.medicalContractId)
                     .addCommand(txCommand)
+                    .addAttachment(attachmentHash)
 
             progressTracker.currentStep = VERIFYING_TRANSACTION
             // Verify that the transaction is valid.

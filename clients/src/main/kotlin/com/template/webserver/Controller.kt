@@ -7,6 +7,7 @@ import jdk.nashorn.internal.parser.JSONParser
 import net.corda.core.contracts.ContractState
 import net.corda.core.crypto.SecureHash
 import net.corda.core.identity.CordaX500Name
+import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.messaging.startTrackedFlow
 import net.corda.core.messaging.vaultQueryBy
 import net.corda.core.utilities.getOrThrow
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import states.BasicMedicalRecordState
 import states.ProfileState
+import java.io.File
+import java.io.InputStream
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -62,7 +65,6 @@ class Controller(rpc: NodeRPCConnection) {
         return ResponseEntity.badRequest().body("Party named $hospital cannot be found.\n")
 
         return try {
-
             val signedTx = proxy.startTrackedFlow(::Register , employeeNo
                     , fname , lname , age , sex, partyHospital ).returnValue.getOrThrow()
             ResponseEntity.status(HttpStatus.CREATED).body("Register successfully.")
@@ -73,12 +75,42 @@ class Controller(rpc: NodeRPCConnection) {
         }
     }
 
-    @PostMapping(value = "addBasicRecord" , headers = [ "Content-Type=application/x-www-form-urlencoded" ])
+    @PostMapping(value = "newPatientRecord" , headers = [ "Content-Type=application/x-www-form-urlencoded" ])
+    fun newPatientRecord(request: HttpServletRequest): ResponseEntity<String> {
+
+        val employeeNo = request.getParameter("employeeNo").toInt()
+        val fname = request.getParameter("fname").toString()
+        val lname = request.getParameter("lname").toString()
+        val age = request.getParameter("age").toInt()
+        val sex = request.getParameter("sex").toString()
+
+        val hospital = request.getParameter("hospital")
+        val hospitalParty = CordaX500Name.parse(hospital)
+        val partyHospital = proxy.wellKnownPartyFromX500Name(hospitalParty) ?:
+        return ResponseEntity.badRequest().body("Party named $hospital cannot be found.\n")
+
+        return try {
+            val signedTx = proxy.startTrackedFlow(::Register , employeeNo
+                    , fname , lname , age , sex, partyHospital ).returnValue.getOrThrow()
+            ResponseEntity.status(HttpStatus.CREATED).body("Register successfully.")
+
+        } catch (ex: Throwable) {
+            logger.error(ex.message, ex)
+            ResponseEntity.badRequest().body(ex.message!!)
+        }
+    }
+
+
+    @PostMapping(value = "addBasicRecord" , headers = [ "Content-Type=multipart/form-data" ])
     fun addBasicRecord(request: HttpServletRequest): ResponseEntity<String> {
 
         val employeeNo = request.getParameter("employeeNo").toInt()
         val systolic = request.getParameter("systolic").toInt()
         val diastolic = request.getParameter("diastolic").toInt()
+
+        val attachPart = request.getPart("file")
+        val fileContent = attachPart.inputStream
+        val uploadHash = proxy.uploadAttachment(fileContent)
 
         val hospital = request.getParameter("hospital")
         val hospitalParty = CordaX500Name.parse(hospital)
@@ -87,8 +119,8 @@ class Controller(rpc: NodeRPCConnection) {
 
         return try {
 
-            val signedTx = proxy.startTrackedFlow(::NewBasicRecord , employeeNo ,systolic , diastolic , partyHospital ).returnValue.getOrThrow()
-            ResponseEntity.status(HttpStatus.CREATED).body("Add Basic Record successfully.")
+            val signedTx = proxy.startTrackedFlow(::NewBasicRecord , employeeNo ,systolic , diastolic, partyHospital, uploadHash).returnValue.getOrThrow()
+            ResponseEntity.status(HttpStatus.CREATED).body("Add Basic Record successfully and attachment hash is $uploadHash")
 
         } catch (ex: Throwable) {
             logger.error(ex.message, ex)
@@ -97,3 +129,6 @@ class Controller(rpc: NodeRPCConnection) {
     }
 
 }
+
+
+

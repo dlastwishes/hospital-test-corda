@@ -18,6 +18,7 @@ class MedicalContract : Contract {
         class AddBasicRecord : TypeOnlyCommandData(), Commands
 
 
+    @Throws(IllegalArgumentException::class)
     override fun verify(tx: LedgerTransaction) {
 
         val medicalCommand = tx.commands.requireSingleCommand<Commands>()
